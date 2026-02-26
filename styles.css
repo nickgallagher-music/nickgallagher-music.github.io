@@ -1,0 +1,106 @@
+/* THEME & CONFIGURATION */
+:root {
+    --bg-color: #121212;
+    --surface-color: #1a1a1a;
+    --primary-text-color: #e0e0e0;
+    --secondary-text-color: #a0a0a0; /* Increased contrast from #888 */
+    --tertiary-text-color: #777;   /* Increased contrast from #555 */
+    --accent-color: #fff;
+    --border-color-light: #2a2a2a;
+    --border-color-medium: #333;
+    --border-color-dark: #222;
+    --shadow-color: rgba(0,0,0,0.5);
+    --btn-bg-color: #fff;
+    --btn-text-color: #000;
+    --btn-hover-bg-color: #b3b3b3;
+}
+
+/* BASIC RESET & TYPOGRAPHY */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--primary-text-color);
+    line-height: 1.6;
+    padding: 20px;
+}
+a { color: var(--accent-color); text-decoration: none; transition: all 0.3s ease; }
+
+/* LAYOUT CONTAINER */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-1 { animation: fadeUp 0.8s ease forwards; opacity: 0; }
+.animate-2 { animation: fadeUp 0.8s ease 0.2s forwards; opacity: 0; }
+.animate-3 { animation: fadeUp 0.8s ease 0.4s forwards; opacity: 0; }
+.animate-4 { animation: fadeUp 0.8s ease 0.6s forwards; opacity: 0; }
+
+/* HEADER */
+header { text-align: center; margin-bottom: 60px; }
+h1 { font-size: 2.5rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; color: var(--accent-color); }
+.tagline { font-size: 1.1rem; color: var(--secondary-text-color); font-weight: 300; }
+
+/* SECTIONS */
+section { margin-bottom: 60px; }
+h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid var(--border-color-medium); padding-bottom: 10px; margin-bottom: 25px; color: var(--accent-color); }
+
+/* MP3 AUDIO PLAYERS */
+.track-list { display: flex; flex-direction: column; gap: 20px; }
+.track {
+    background: var(--surface-color);
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.track:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px var(--shadow-color);
+    border-color: #444;
+}
+.track-info { margin-bottom: 12px; }
+.track-title { font-weight: bold; color: var(--accent-color); font-size: 1.1rem; margin-bottom: 4px; }
+.track-desc { color: var(--secondary-text-color); font-size: 0.9rem; }
+
+/* Style the native audio player for dark mode */
+audio { width: 100%; height: 40px; outline: none; }
+/* Note: Styling native audio players is inconsistent. This provides a basic dark theme for WebKit. */
+audio::-webkit-media-controls-panel { background-color: #f0f0f0; }
+
+/* CREDITS & CONTACT SECTION */
+.credits-list { list-style: none; margin-bottom: 40px; }
+.credit-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border-color-dark); padding-bottom: 15px; transition: color 0.3s ease; }
+.credit-item:hover .credit-title { color: var(--secondary-text-color); }
+.credit-title { font-weight: bold; color: var(--accent-color); transition: color 0.3s ease; }
+.credit-role { color: var(--secondary-text-color); font-size: 0.9rem; }
+.credit-year { color: var(--tertiary-text-color); font-size: 0.9rem; }
+
+.contact-section { text-align: center; padding-top: 20px; }
+.contact-section p { margin-bottom: 20px; color: var(--secondary-text-color); }
+
+/* CONTACT BUTTON */
+.contact-btn {
+    display: inline-block;
+    background: var(--btn-bg-color);
+    color: var(--btn-text-color);
+    padding: 14px 30px;
+    border-radius: 4px;
+    font-weight: bold;
+    border: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+.contact-btn:hover { background: var(--btn-hover-bg-color); transform: scale(1.02); }
+
+/* FOOTER */
+footer { text-align: center; font-size: 0.8rem; color: #444; margin-top: 80px; }
