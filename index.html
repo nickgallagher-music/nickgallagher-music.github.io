@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts: Preconnect and Link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@300;400;700&family=Poppins:wght@300;400;700&family=Roboto+Mono:wght@400;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+
     <title>Nick Gallagher | Film & Media Composer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -19,26 +25,26 @@
             <h2>Selected Works</h2>
             <div class="track-list">
 
-                <div class="track">
+                <div class="track" data-audio-src="audio/tension-strings.mp3">
                     <div class="track-info">
                         <div class="track-title">Main Title Theme</div>
-                        <div class="track-desc">Orchestral / Tension - 2:15</div>
+                        <div class="track-desc" data-genre="Orchestral / Tension"></div>
                     </div>
-                    <audio controls controlsList="nodownload">
-                        <source src="audio/tension-strings.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
+                    <div class="audio-player">
+                        <button class="play-btn" aria-label="Play/Pause"></button>
+                        <div class="waveform-container"></div>
+                    </div>
                 </div>
 
-                <div class="track">
+                <div class="track" data-audio-src="audio/desert-ambience.mp3">
                     <div class="track-info">
                         <div class="track-title">Desert Ambience</div>
-                        <div class="track-desc">Synthesizer / Soundscape - 3:40</div>
+                        <div class="track-desc" data-genre="Synthesizer / Soundscape"></div>
                     </div>
-                    <audio controls controlsList="nodownload">
-                        <source src="audio/desert-ambience.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
+                    <div class="audio-player">
+                        <button class="play-btn" aria-label="Play/Pause"></button>
+                        <div class="waveform-container"></div>
+                    </div>
                 </div>
 
             </div>
@@ -72,12 +78,12 @@
 
             <div class="contact-section">
                 <p>Currently available for new projects.</p>
-                <a href="mailto:your.email@example.com" class="contact-btn">Email Me</a>
+                <a href="mailto:nick.gallagher@me.com" class="contact-btn">Email Me</a>
             </div>
         </section>
 
         <footer class="animate-4">
-            &copy; <span id="year"></span> Your Name. All rights reserved.
+            &copy; <span id="year"></span> Nick Gallagher. All rights reserved.
         </footer>
 
     </div>
@@ -86,6 +92,12 @@
         // Set the current year in the footer
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
+
+    <!-- WaveSurfer.js -->
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+
+    <!-- Custom Player Logic -->
+    <script src="scripts.js" defer></script>
 
 </body>
 </html>
