@@ -141,7 +141,7 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
     background-color: var(--border-color-light); /* Placeholder bg */
 }
 
-.about-text p:last-of-type {
+.about-text .location {
     margin-top: 20px;
     font-size: 0.9rem;
     /*font-style: italic;*/
