@@ -180,6 +180,25 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 }
 .credit-item:hover .credit-title { color: var(--secondary-text-color); }
 
+.credit-item.has-laurels {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+}
+
+.credit-item-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.credit-laurels {
+    width: 100%;
+    max-width: 500px;
+    align-self: center;
+    background-color: var(--border-color-light); /* Placeholder bg */
+}
+
 .credit-poster {
     width: 60px;
     height: 90px;
