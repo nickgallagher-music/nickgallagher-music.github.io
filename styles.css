@@ -72,15 +72,44 @@ section { margin-bottom: 60px; }
 h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color-medium); padding-bottom: 10px; margin-bottom: 25px; color: var(--accent-color); }
 
 /* MP3 AUDIO PLAYERS */
-.track-list { display: flex; flex-direction: column; gap: 20px; }
-.track {
+.filter-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.filter-btn {
+    background: none;
+    border: 1px solid var(--border-color-medium);
+    color: var(--secondary-text-color);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+}
+
+.filter-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.filter-btn.active {
+    background-color: var(--accent-color);
+    color: var(--btn-text-color);
+    border-color: var(--accent-color);
+}
+
+.content-list { display: flex; flex-direction: column; gap: 20px; }
+.track, .video-item {
     background: var(--surface-color);
     padding: 20px;
     border-radius: 6px;
     border: 1px solid var(--border-color-light);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.track:hover {
+.track:hover, .video-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 15px var(--shadow-color);
     border-color: #444;
@@ -88,6 +117,38 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 .track-info { margin-bottom: 12px; }
 .track-title { font-weight: bold; color: var(--accent-color); font-size: 1.1rem; margin-bottom: 4px; }
 .track-desc { color: var(--secondary-text-color); font-size: 0.9rem; }
+
+@media (min-width: 768px) {
+    .content-list {
+        align-items: center;
+    }
+    .track, .video-item {
+        width: 75%;
+    }
+}
+
+/* VIDEO ITEMS */
+.video-item {
+    /* Shared styles are with .track */
+}
+.video-info { margin-bottom: 12px; }
+.video-title { font-weight: bold; color: var(--accent-color); font-size: 1.1rem; margin-bottom: 4px; }
+.video-desc { color: var(--secondary-text-color); font-size: 0.9rem; }
+
+.video-embed-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 4px;
+}
+.video-embed-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
 
 /* WAVESURFER AUDIO PLAYER */
 .audio-player {
@@ -123,6 +184,11 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 .waveform-container {
     width: 100%;
     height: 50px;
+}
+
+/* UTILITY */
+.hidden {
+    display: none;
 }
 
 /* ABOUT SECTION */
