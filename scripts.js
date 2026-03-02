@@ -85,6 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${minutes}:${paddedSeconds}`;
     };
 
+    // --- WaveSurfer Initialization ---
+    // Cache computed styles to avoid re-calculating in the loop
+    const computedStyles = getComputedStyle(document.documentElement);
+    const waveColor = computedStyles.getPropertyValue('--secondary-text-color');
+    const progressColor = computedStyles.getPropertyValue('--accent-color');
+
     tracks.forEach(track => {
         const container = track.querySelector('.waveform-container');
         const playBtn = track.querySelector('.play-btn');
@@ -93,8 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const waveSurfer = WaveSurfer.create({
             container: container,
-            waveColor: getComputedStyle(document.documentElement).getPropertyValue('--secondary-text-color'),
-            progressColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color'),
+            waveColor: waveColor,
+            progressColor: progressColor,
             url: audioSrc,
             barWidth: 2,
             barGap: 1,
@@ -155,26 +161,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterControls = document.querySelector('.filter-controls');
     const contentItems = document.querySelectorAll('.content-list > div');
 
-    filterControls.addEventListener('click', (e) => {
-        const clickedButton = e.target.closest('.filter-btn');
-        if (!clickedButton) return;
+    if (filterControls) {
+        filterControls.addEventListener('click', (e) => {
+            const clickedButton = e.target.closest('.filter-btn');
+            if (!clickedButton) return;
 
-        const filterValue = clickedButton.dataset.filter;
+            const filterValue = clickedButton.dataset.filter;
 
-        // Update active button state
-        filterControls.querySelector('.active').classList.remove('active');
-        clickedButton.classList.add('active');
+            // Update active button state
+            filterControls.querySelector('.active').classList.remove('active');
+            clickedButton.classList.add('active');
 
-        // Pause all audio when switching filters
-        waveSurfers.forEach(ws => {
-            if (ws.isPlaying()) {
-                ws.pause();
-            }
+            // Pause all audio when switching filters
+            waveSurfers.forEach(ws => {
+                if (ws.isPlaying()) {
+                    ws.pause();
+                }
+            });
+
+            // Filter content
+            contentItems.forEach(item => {
+                item.classList.toggle('hidden', item.dataset.category !== filterValue);
+            });
         });
-
-        // Filter content
-        contentItems.forEach(item => {
-            item.classList.toggle('hidden', item.dataset.category !== filterValue);
-        });
-    });
+    }
 });

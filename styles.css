@@ -238,6 +238,7 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 .credits-list { list-style: none; margin-bottom: 40px; }
 .credit-item {
     display: flex;
+    flex-wrap: wrap; /* Allow wrapping for laurels */
     align-items: center;
     gap: 20px;
     margin-bottom: 15px;
@@ -246,23 +247,21 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 }
 .credit-item:hover .credit-title { color: var(--secondary-text-color); }
 
-.credit-item.has-laurels {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-}
-
 .credit-item-row {
     display: flex;
     align-items: center;
     gap: 20px;
+    flex-basis: 100%; /* Ensure it takes full width initially */
 }
 
 .credit-laurels {
     width: 100%;
     max-width: 500px;
+    margin-top: 15px; /* Add space between details and laurels */
     align-self: center;
     background-color: var(--border-color-light); /* Placeholder bg */
+    flex-basis: 100%; /* Ensure it takes full width */
+    text-align: center; /* Center the image if it's smaller than the container */
 }
 
 .credit-poster {
