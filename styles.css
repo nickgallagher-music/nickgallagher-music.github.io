@@ -101,13 +101,18 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
     border-color: var(--accent-color);
 }
 
-.content-list { display: flex; flex-direction: column; gap: 20px; }
+.content-list { display: flex; flex-direction: column; }
 .track, .video-item {
     background: var(--surface-color);
     padding: 20px;
     border-radius: 6px;
     border: 1px solid var(--border-color-light);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: opacity 0.4s ease, max-height 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease, margin-bottom 0.4s ease;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.track:last-child, .video-item:last-child {
+    margin-bottom: 0;
 }
 .track:hover, .video-item:hover {
     transform: translateY(-3px);
@@ -122,8 +127,11 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
     .content-list {
         align-items: center;
     }
-    .track, .video-item {
+    .track {
         width: 100%;
+    }
+    .video-item {
+        width: 80%;
     }
 }
 
@@ -186,11 +194,6 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
     height: 50px;
 }
 
-/* UTILITY */
-.hidden {
-    display: none;
-}
-
 /* ABOUT SECTION */
 .about-content {
     display: flex;
@@ -215,6 +218,11 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 }
 
 /* WORK GALLERY SECTION */
+.photo-gallery, .studio-gear-section {
+    transition: opacity 0.4s ease, max-height 0.4s ease, margin-bottom 0.4s ease;
+    overflow: hidden;
+}
+
 .photo-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -232,6 +240,29 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 .gallery-photo:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 15px var(--shadow-color);
+}
+
+.studio-gear-section ul {
+    /* Remove default browser indentation to align with other content */
+    list-style-position: inside;
+    padding-left: 0;
+}
+
+.studio-gear-section h4 {
+    margin-top: 25px; /* Increased space between gear sections */
+    margin-bottom: 10px; /* Space between header and its list */
+    color: var(--secondary-text-color);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.studio-gear-section h4:first-of-type {
+    margin-top: 0; /* No extra space above the first section */
+}
+
+.studio-gear-section li {
+    margin-bottom: 5px; /* Slightly decreased space between gear items */
 }
 
 /* CREDITS & CONTACT SECTION */
@@ -271,6 +302,11 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
     border-radius: 4px;
     flex-shrink: 0;
     background-color: var(--border-color-light); /* Placeholder bg while image loads */
+    transition: transform 0.3s ease;
+}
+
+.credit-poster-link:hover .credit-poster {
+    transform: scale(1.05);
 }
 
 .credit-details { flex-grow: 1; }
@@ -298,3 +334,14 @@ h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-b
 
 /* FOOTER */
 footer { text-align: center; font-size: 0.8rem; color: var(--tertiary-text-color); margin-top: 80px; }
+
+/* UTILITY */
+.hidden {
+    opacity: 0;
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-width: 0 !important;
+}

@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         videoData.forEach(video => {
             const videoHTML = `
-                <div class="video-item hidden" data-category="video">
+                <div class="video-item" data-category="video">
                     <div class="video-info">
                         <div class="video-title"></div>
                         <div class="video-desc">${video.description}</div>
@@ -157,19 +157,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Filter Logic ---
-    const filterControls = document.querySelector('.filter-controls');
-    const contentItems = document.querySelectorAll('.content-list > div');
+    // --- Filter Logic for Selected Works ---
+    const worksFilterControls = document.querySelector('#music .filter-controls');
+    const worksContentItems = document.querySelectorAll('.content-list > div');
 
-    if (filterControls) {
-        filterControls.addEventListener('click', (e) => {
+    if (worksFilterControls) {
+        worksFilterControls.addEventListener('click', (e) => {
             const clickedButton = e.target.closest('.filter-btn');
             if (!clickedButton) return;
 
             const filterValue = clickedButton.dataset.filter;
 
             // Update active button state
-            filterControls.querySelector('.active').classList.remove('active');
+            worksFilterControls.querySelector('.active').classList.remove('active');
             clickedButton.classList.add('active');
 
             // Pause all audio when switching filters
@@ -180,7 +180,35 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Filter content
-            contentItems.forEach(item => {
+            worksContentItems.forEach(item => {
+                item.classList.toggle('hidden', item.dataset.category !== filterValue);
+            });
+        });
+
+        // Simulate a click on the default active filter button (Video)
+        const defaultFilterButton = worksFilterControls.querySelector('.filter-btn.active');
+        if (defaultFilterButton) {
+            defaultFilterButton.click();
+        }
+    }
+
+    // --- Filter Logic for Gallery ---
+    const galleryFilterControls = document.querySelector('.gallery-filters');
+    const galleryContentItems = document.querySelectorAll('.gallery-content > div');
+
+    if (galleryFilterControls) {
+        galleryFilterControls.addEventListener('click', (e) => {
+            const clickedButton = e.target.closest('.filter-btn');
+            if (!clickedButton) return;
+
+            const filterValue = clickedButton.dataset.filter;
+
+            // Update active button state
+            galleryFilterControls.querySelector('.active').classList.remove('active');
+            clickedButton.classList.add('active');
+
+            // Filter content
+            galleryContentItems.forEach(item => {
                 item.classList.toggle('hidden', item.dataset.category !== filterValue);
             });
         });

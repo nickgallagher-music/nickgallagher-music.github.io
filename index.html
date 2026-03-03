@@ -28,11 +28,24 @@
             <p class="tagline">Film & Media Composer | Sound Designer</p>
         </header>
 
-        <section id="music" class="animate-2">
+        <section id="about" class="animate-2">
+            <h2>About</h2>
+            <div class="about-content">
+                <img src="images/ng-profile1.jpg" alt="Nick Gallagher" class="artist-photo">
+                <div class="about-text">
+                    <p>
+                        Nick Gallagher believes his role as composer is to understand and amplify the emotional intent of the project. His stylistic influences are wide-ranging from jazz to electronic and beyond.
+                    </p>
+                    <p class="location">Based in Chicago, IL</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="music" class="animate-3">
             <h2>Selected Works</h2>
             <div class="filter-controls">
-                <button class="filter-btn active" data-filter="audio">Audio</button>
-                <button class="filter-btn" data-filter="video">Video</button>
+                <button class="filter-btn active" data-filter="video">Video</button>
+                <button class="filter-btn" data-filter="audio">Audio</button>
             </div>
             <div class="content-list">
 
@@ -41,25 +54,58 @@
             </div>
         </section>
 
-        <section id="about" class="animate-3">
-            <h2>About</h2>
-            <div class="about-content">
-                <img src="images/ng-profile1.jpg" alt="Nick Gallagher" class="artist-photo">
-                <div class="about-text">
-                    <p>
-                        I am a composer tailored to visual storytelling. With a focus on striking arrangements and emotional resonance, I create soundscapes that serve the narrative. My work balances thematic depth with technical precision.
-                    </p>
-                    <p class="location">Based in Chicago, IL</p>
-                </div>
-            </div>
-        </section>
-
         <section id="work-gallery" class="animate-4">
             <h2>Behind the Scenes</h2>
-            <div class="photo-gallery">
-                <img src="images/work-photo-1.jpeg" alt="Working on a project" class="gallery-photo">
-                <img src="images/still-still-1.jpg" alt="Studio setup" class="gallery-photo">
-                <img src="images/work-photo-3.jpeg" alt="Scoring session" class="gallery-photo">
+            <div class="filter-controls gallery-filters">
+                <button class="filter-btn active" data-filter="gallery">Gallery</button>
+                <button class="filter-btn" data-filter="gear">Studio Gear</button>
+            </div>
+            <div class="gallery-content">
+                <div class="photo-gallery" data-category="gallery">
+                    <img src="images/work-photo-1.jpeg" alt="Working on a project" class="gallery-photo">
+                    <img src="images/still-still-1.jpg" alt="Studio setup" class="gallery-photo">
+                    <img src="images/work-photo-3.jpeg" alt="Scoring session" class="gallery-photo">
+                </div>
+                <div class="studio-gear-section" data-category="gear">
+
+                    <h4>Audio Interface/Signal Processing</h4>
+                    <ul>
+                        <li>Universal Audio Apollo x6 Gen2</li>
+                        <li>Focusrite Clarett+ Octopre</li>
+                        <li>Neve 511 Preamps</li>
+                        <li>SSL SiX Channel</li>
+                        <li>Carnaby Harmonic EQ</li>
+                        <li>Rupert Neve Designs DI</li>
+                        <!-- Add more interface/DAW items here -->
+                    </ul>
+                    <h4>Controller/Mixer</h4>
+                    <ul>
+                        <li>Softube Console 1 MK3 Channel + Fader</li>
+                        <li>Native Instruments Kontrol S88</li>
+                        <!-- Add more interface/DAW items here -->
+                    </ul>
+                    <h4>DAW</h4>
+                    <ul>
+                        <li>Pro Tools</li>
+                        <li>Logic Pro</li>
+                        <li>Cubase</li>
+                        <!-- Add more interface/DAW items here -->
+                    </ul>
+
+                    <h4>Monitors/Speakers</h4>
+                    <ul>
+                        <li>Yamaha HS5 Studio Monitors</li>
+                    </ul>
+
+                    <h4>Microphones</h4>
+                    <ul>
+                        <li>Shure SM7B</li>
+                        <li>Neumann TLM 103</li>
+                        <!-- Add more microphone items here -->
+                    </ul>
+
+                    <!-- You can add more categories and lists here -->
+                </div>
             </div>
         </section>
 
@@ -67,7 +113,9 @@
             <h2>Selected Credits</h2>
             <ul class="credits-list">
                 <li class="credit-item">
-                    <img src="images/LookingForward_Poster.jpg" alt="Looking Forward Poster" class="credit-poster">
+                    <a href="https://www.imdb.com/title/tt37897587/?ref_=nm_knf_t_3" target="_blank" class="credit-poster-link">
+                        <img src="images/LookingForward_Poster.jpg" alt="Looking Forward Poster" class="credit-poster">
+                    </a>
                     <div class="credit-details">
                         <div class="credit-title">Looking Forward</div>
                         <div class="credit-role">Director: Devon Gulati</div>
@@ -75,15 +123,14 @@
                     <div class="credit-year">2026</div>
                 </li>
                 <li class="credit-item">
-                    <div class="credit-item-row">
+                    <a href="https://www.imdb.com/title/tt29455959/?ref_=nm_knf_t_1" target="_blank" class="credit-poster-link">
                         <img src="images/nazar-poster.jpg" alt="Nazar" class="credit-poster">
-                        <div class="credit-details">
-                            <div class="credit-title">NAZAR</div>
-                            <div class="credit-role">Director: Sean Sankalp Raju</div>
-                        </div>
-                        <div class="credit-year">2025</div>
+                    </a>
+                    <div class="credit-details">
+                        <div class="credit-title">NAZAR</div>
+                        <div class="credit-role">Director: Sean Sankalp Raju</div>
                     </div>
-                    <!-- <img src="images/laurels-nazar.jpg" alt="Nazar Film Festival Laurels" class="credit-laurels"> -->
+                    <div class="credit-year">2025</div>
                 </li>
             </ul>
 
