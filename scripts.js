@@ -186,9 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Simulate a click on the default active filter button (Video)
-        const defaultFilterButton = worksFilterControls.querySelector('.filter-btn.active');
-        if (defaultFilterButton) {
-            defaultFilterButton.click();
+        const defaultWorksFilter = worksFilterControls.querySelector('.filter-btn.active');
+        if (defaultWorksFilter) {
+            defaultWorksFilter.click();
         }
     }
 
@@ -212,5 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.classList.toggle('hidden', item.dataset.category !== filterValue);
             });
         });
+
+        // Simulate a click on the default active filter button (Gallery)
+        const defaultGalleryFilter = galleryFilterControls.querySelector('.filter-btn.active');
+        if (defaultGalleryFilter) {
+            defaultGalleryFilter.click();
+        }
     }
 });
