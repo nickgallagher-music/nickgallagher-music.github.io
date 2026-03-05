@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const videoData = [
         {
+            url: 'https://www.youtube.com/embed/7tLFFcQvb1k?si=T2FltbcV4B3J73Yc',
+            description: 'Documentary / Sports'
+        },
+        {
             url: 'https://www.youtube.com/embed/kvIvoc9aJ1g',
             description: 'Short Film / Drama'
         },
@@ -36,6 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
             url: 'https://www.youtube.com/embed/A4otF1ENM0k',
             description: 'Short Film / Drama'
         },
+        {
+            url: 'https://www.youtube.com/embed/VYwNl2wS7fM?si=7ww-lsXS1fWt4P9_',
+            description: 'Documentary / Drama'
+        },
+        {
+            url: 'https://www.youtube.com/embed/o3kIm_ze774?si=tEzrxB5HBvDBIDjN',
+            description: 'Documentary / Drama'
+        }
         // To add more videos, just add a new object here
     ];
 
