@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
             genre: 'Cinematic / Uplifting'
         },
         {
+            url: 'audio/main-menu-swim.mp3',
+            title: 'Main Menu: Campaign of Water',
+            genre: 'Game / Epic'
+        },
+        {
             url: 'audio/centurion.mp3',
             title: 'Centurion: Boss of the Arena',
             genre: 'Game / Epic'
