@@ -20,6 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
             url: 'audio/Stargardts_clip_2.mp3',
             title: 'Building Strength',
             genre: 'Cinematic / Uplifting'
+        },
+        {
+            url: 'audio/centurion.mp3',
+            title: 'Centurion: Boss of the Arena',
+            genre: 'Game / Epic'
         }
     ];
 
