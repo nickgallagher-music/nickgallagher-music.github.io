@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="track-desc" data-genre="${audio.genre}">${audio.genre}</div>
                     </div>
                     <div class="audio-player">
-                        <button class="play-btn" aria-label="Play/Pause"></button>
-                        <button class="restart-btn" aria-label="Restart track" disabled></button>
+                        <button class="play-btn" aria-label="Play ${audio.title}"></button>
+                        <button class="restart-btn" aria-label="Restart ${audio.title}" disabled></button>
                         <div class="waveform-container"></div>
                     </div>
                 </div>
@@ -163,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const restartBtn = track.querySelector('.restart-btn');
             const audioSrc = track.dataset.audioSrc;
             const trackDesc = track.querySelector('.track-desc');
+            const trackTitle = track.querySelector('.track-title').textContent;
             const precomputed = allPeaks[audioSrc];
 
             const media = new Audio();
@@ -201,13 +202,17 @@ document.addEventListener('DOMContentLoaded', () => {
             restartBtn.onclick = () => waveSurfer.play(0);
             waveSurfer.on('play', () => {
                 playBtn.classList.add('playing');
+                playBtn.setAttribute('aria-label', `Pause ${trackTitle}`);
                 restartBtn.disabled = false;
                 // Only one track plays at a time
                 waveSurfers.forEach(other => {
                     if (other !== waveSurfer) other.pause();
                 });
             });
-            waveSurfer.on('pause', () => playBtn.classList.remove('playing'));
+            waveSurfer.on('pause', () => {
+                playBtn.classList.remove('playing');
+                playBtn.setAttribute('aria-label', `Play ${trackTitle}`);
+            });
         });
     };
 
@@ -223,9 +228,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const filterValue = clickedButton.dataset.filter;
 
-            // Update active button state
-            controls.querySelector('.active').classList.remove('active');
+            // Update active button state (aria-pressed tells screen readers which tab is on)
+            const previousButton = controls.querySelector('.active');
+            previousButton.classList.remove('active');
+            previousButton.setAttribute('aria-pressed', 'false');
             clickedButton.classList.add('active');
+            clickedButton.setAttribute('aria-pressed', 'true');
 
             items.forEach(item => {
                 item.hidden = item.dataset.category !== filterValue;

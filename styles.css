@@ -403,3 +403,15 @@ footer { text-align: center; font-size: 0.8rem; color: var(--tertiary-text-color
 /* UTILITY */
 /* Make sure the hidden attribute wins over display: flex/grid set above */
 [hidden] { display: none !important; }
+
+/* Respect the "reduce motion" accessibility setting */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    /* The fade-in animations start hidden, so show them right away instead */
+    .animate-1, .animate-2, .animate-3, .animate-4, .animate-5 { opacity: 1; }
+    .track:hover, .video-item:hover, .gallery-photo:hover,
+    .credit-poster-link:hover .credit-poster, .contact-btn:hover { transform: none; }
+}
