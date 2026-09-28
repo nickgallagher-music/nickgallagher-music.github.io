@@ -31,34 +31,41 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Centurion: Boss of the Arena',
             genre: 'Game / Epic'
         }
+        // After adding a track, run: python3 tools/generate_peaks.py
     ];
 
     const videoData = [
         {
-            url: 'https://www.youtube.com/embed/7tLFFcQvb1k?si=T2FltbcV4B3J73Yc',
+            id: '7tLFFcQvb1k',
+            title: 'LOOKING FORWARD: From Vision Loss to the Paralympics 🏆 Documentary Short Film',
             description: 'Documentary / Sports'
         },
         {
-            url: 'https://www.youtube.com/embed/kvIvoc9aJ1g',
+            id: 'kvIvoc9aJ1g',
+            title: 'The Gaze (2023) - Score Clip 1',
             description: 'Short Film / Drama'
         },
         {
-            url: 'https://www.youtube.com/embed/6OGEWhuFCsU?si=7ItFjA9BzSraDVtD',
+            id: '6OGEWhuFCsU',
+            title: 'The Gaze (2023) - Score Clip 2',
             description: 'Short Film / Drama'
         },
         {
-            url: 'https://www.youtube.com/embed/A4otF1ENM0k',
+            id: 'A4otF1ENM0k',
+            title: 'The Gaze (2023) - Score Clip 3',
             description: 'Short Film / Drama'
         },
         {
-            url: 'https://www.youtube.com/embed/VYwNl2wS7fM?si=7ww-lsXS1fWt4P9_',
+            id: 'VYwNl2wS7fM',
+            title: 'Guaranteed Income (2023) - Score Clip 1',
             description: 'Documentary / Drama'
         },
         {
-            url: 'https://www.youtube.com/embed/o3kIm_ze774?si=tEzrxB5HBvDBIDjN',
+            id: 'o3kIm_ze774',
+            title: 'Guaranteed Income (2023) - Score Clip 2',
             description: 'Documentary / Drama'
         }
-        // To add more videos, just add a new object here
+        // To add more videos, add a new object with the YouTube video ID and title
     ];
 
     // --- Render Dynamic Content ---
@@ -69,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="track" data-category="audio" data-audio-src="${audio.url}">
                     <div class="track-info">
                         <div class="track-title">${audio.title}</div>
-                        <div class="track-desc" data-genre="${audio.genre}"></div>
+                        <div class="track-desc" data-genre="${audio.genre}">${audio.genre}</div>
                     </div>
                     <div class="audio-player">
                         <button class="play-btn" aria-label="Play/Pause"></button>
@@ -84,20 +91,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const videoHTML = `
                 <div class="video-item" data-category="video">
                     <div class="video-info">
-                        <div class="video-title"></div>
+                        <div class="video-title">${video.title}</div>
                         <div class="video-desc">${video.description}</div>
                     </div>
-                    <div class="video-embed-container">
-                        <iframe src="${video.url}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                    </div>
+                    <div class="video-embed-container" data-video-id="${video.id}" data-video-title="${video.title}"></div>
                 </div>
             `;
             contentList.insertAdjacentHTML('beforeend', videoHTML);
         });
     }
 
-    const tracks = document.querySelectorAll('.track');
-    const waveSurfers = [];
+    // --- Lightweight YouTube Embeds ---
+    // Show a thumbnail until the visitor clicks, then swap in the real player.
+    // This avoids loading YouTube's heavy player for every video on page load.
+    const videoContainers = document.querySelectorAll('.video-embed-container');
+
+    const showVideoThumbnail = (container) => {
+        const { videoId, videoTitle } = container.dataset;
+        container.innerHTML = `
+            <button class="video-facade" aria-label="Play video: ${videoTitle}">
+                <img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="" loading="lazy">
+                <span class="video-play-icon"></span>
+            </button>
+        `;
+        container.querySelector('.video-facade').addEventListener('click', () => {
+            container.innerHTML = `
+                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+                        title="${videoTitle}"
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                        allowfullscreen></iframe>
+            `;
+        });
+    };
+
+    // Resetting a loaded player back to its thumbnail also stops playback
+    const stopAllVideos = () => {
+        videoContainers.forEach(container => {
+            if (container.querySelector('iframe')) showVideoThumbnail(container);
+        });
+    };
+
+    videoContainers.forEach(showVideoThumbnail);
 
     // Helper function to format time from seconds to MM:SS
     const formatTime = (seconds) => {
@@ -108,137 +142,115 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- WaveSurfer Initialization ---
-    // Cache computed styles to avoid re-calculating in the loop
-    const computedStyles = getComputedStyle(document.documentElement);
-    const waveColor = computedStyles.getPropertyValue('--secondary-text-color');
-    const progressColor = computedStyles.getPropertyValue('--accent-color');
+    // Players are created the first time the Audio tab is opened. Waveforms are
+    // drawn from precomputed peaks (audio/peaks.js), so each MP3 is only
+    // downloaded when its play button is pressed.
+    const waveSurfers = [];
 
-    tracks.forEach(track => {
-        const container = track.querySelector('.waveform-container');
-        const playBtn = track.querySelector('.play-btn');
-        const audioSrc = track.dataset.audioSrc;
-        const trackDesc = track.querySelector('.track-desc');
+    const initAudioPlayers = () => {
+        if (waveSurfers.length > 0) return;
 
-        const waveSurfer = WaveSurfer.create({
-            container: container,
-            waveColor: waveColor,
-            progressColor: progressColor,
-            url: audioSrc,
-            barWidth: 2,
-            barGap: 1,
-            barRadius: 2,
-            height: 50,
-            cursorWidth: 0,
+        // Cache computed styles to avoid re-calculating in the loop
+        const computedStyles = getComputedStyle(document.documentElement);
+        const waveColor = computedStyles.getPropertyValue('--secondary-text-color');
+        const progressColor = computedStyles.getPropertyValue('--accent-color');
+        const allPeaks = window.AUDIO_PEAKS || {};
+
+        document.querySelectorAll('.track').forEach(track => {
+            const container = track.querySelector('.waveform-container');
+            const playBtn = track.querySelector('.play-btn');
+            const audioSrc = track.dataset.audioSrc;
+            const trackDesc = track.querySelector('.track-desc');
+            const precomputed = allPeaks[audioSrc];
+
+            const media = new Audio();
+            media.preload = 'none';
+
+            const waveSurfer = WaveSurfer.create({
+                container: container,
+                waveColor: waveColor,
+                progressColor: progressColor,
+                url: audioSrc,
+                media: media,
+                // Without precomputed peaks, WaveSurfer falls back to downloading and decoding the file
+                peaks: precomputed ? [precomputed.peaks] : undefined,
+                duration: precomputed ? precomputed.duration : undefined,
+                barWidth: 2,
+                barGap: 1,
+                barRadius: 2,
+                height: 50,
+                cursorWidth: 0,
+            });
+
+            waveSurfers.push(waveSurfer);
+
+            // Set a default volume (e.g., 80%)
+            waveSurfer.setVolume(0.8);
+
+            // When the waveform is ready, add the duration to the track description
+            waveSurfer.on('ready', (duration) => {
+                const formattedTime = formatTime(duration);
+                const genre = trackDesc.dataset.genre;
+                trackDesc.textContent = `${genre} - ${formattedTime}`;
+            });
+
+            playBtn.onclick = () => waveSurfer.playPause();
+            waveSurfer.on('play', () => {
+                playBtn.classList.add('playing');
+                // Only one track plays at a time
+                waveSurfers.forEach(other => {
+                    if (other !== waveSurfer) other.pause();
+                });
+            });
+            waveSurfer.on('pause', () => playBtn.classList.remove('playing'));
         });
+    };
 
-        waveSurfers.push(waveSurfer);
+    // --- Filter Logic ---
+    // Hidden items get the `hidden` attribute so they are removed from
+    // the layout, tab order and screen readers, not just visually collapsed.
+    const setupFilter = (controls, items, onChange) => {
+        if (!controls) return;
 
-        // Set a default volume (e.g., 80%)
-        waveSurfer.setVolume(0.8);
-
-        // When the audio is decoded and ready, update the track description
-        waveSurfer.on('ready', (duration) => {
-            const formattedTime = formatTime(duration);
-            const genre = trackDesc.dataset.genre;
-            trackDesc.textContent = `${genre} - ${formattedTime}`;
-        });
-
-        playBtn.onclick = () => waveSurfer.playPause();
-        waveSurfer.on('play', () => playBtn.classList.add('playing'));
-        waveSurfer.on('pause', () => playBtn.classList.remove('playing'));
-    });
-
-    // --- Dynamically Load Video Titles ---
-    const videoItems = document.querySelectorAll('.video-item');
-    videoItems.forEach(item => {
-        const iframe = item.querySelector('iframe');
-        if (!iframe) return;
-
-        const embedUrl = iframe.src;
-        let originalVideoUrl;
-
-        if (embedUrl.includes('youtube.com/embed/')) {
-            const videoId = embedUrl.split('/embed/')[1].split('?')[0];
-            originalVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-        } else if (embedUrl.includes('player.vimeo.com/video/')) {
-            const videoId = embedUrl.split('/video/')[1].split('?')[0];
-            originalVideoUrl = `https://vimeo.com/${videoId}`;
-        }
-
-        if (originalVideoUrl) {
-            // Use noembed.com as a CORS-friendly oEmbed provider
-            const noEmbedUrl = `https://noembed.com/embed?url=${encodeURIComponent(originalVideoUrl)}`;
-            fetch(noEmbedUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.title && item.querySelector('.video-title')) {
-                        item.querySelector('.video-title').textContent = data.title;
-                    }
-                })
-                .catch(error => console.error('Error fetching video metadata:', error));
-        }
-    });
-
-    // --- Filter Logic for Selected Works ---
-    const worksFilterControls = document.querySelector('#music .filter-controls');
-    const worksContentItems = document.querySelectorAll('.content-list > div');
-
-    if (worksFilterControls) {
-        worksFilterControls.addEventListener('click', (e) => {
+        controls.addEventListener('click', (e) => {
             const clickedButton = e.target.closest('.filter-btn');
             if (!clickedButton) return;
 
             const filterValue = clickedButton.dataset.filter;
 
             // Update active button state
-            worksFilterControls.querySelector('.active').classList.remove('active');
+            controls.querySelector('.active').classList.remove('active');
             clickedButton.classList.add('active');
 
-            // Pause all audio when switching filters
-            waveSurfers.forEach(ws => {
-                if (ws.isPlaying()) {
-                    ws.pause();
-                }
+            items.forEach(item => {
+                item.hidden = item.dataset.category !== filterValue;
             });
 
-            // Filter content
-            worksContentItems.forEach(item => {
-                item.classList.toggle('hidden', item.dataset.category !== filterValue);
-            });
+            // Runs after the new tab is visible, so players are created at full width
+            if (onChange) onChange(filterValue);
         });
 
-        // Simulate a click on the default active filter button (Video)
-        const defaultWorksFilter = worksFilterControls.querySelector('.filter-btn.active');
-        if (defaultWorksFilter) {
-            defaultWorksFilter.click();
+        // Simulate a click on the default active filter button
+        const defaultFilter = controls.querySelector('.filter-btn.active');
+        if (defaultFilter) {
+            defaultFilter.click();
         }
-    }
+    };
 
-    // --- Filter Logic for Gallery ---
-    const galleryFilterControls = document.querySelector('.gallery-filters');
-    const galleryContentItems = document.querySelectorAll('.gallery-content > div');
-
-    if (galleryFilterControls) {
-        galleryFilterControls.addEventListener('click', (e) => {
-            const clickedButton = e.target.closest('.filter-btn');
-            if (!clickedButton) return;
-
-            const filterValue = clickedButton.dataset.filter;
-
-            // Update active button state
-            galleryFilterControls.querySelector('.active').classList.remove('active');
-            clickedButton.classList.add('active');
-
-            // Filter content
-            galleryContentItems.forEach(item => {
-                item.classList.toggle('hidden', item.dataset.category !== filterValue);
-            });
-        });
-
-        // Simulate a click on the default active filter button (Gallery)
-        const defaultGalleryFilter = galleryFilterControls.querySelector('.filter-btn.active');
-        if (defaultGalleryFilter) {
-            defaultGalleryFilter.click();
+    // Selected Works: pause whatever is playing when switching tabs
+    setupFilter(
+        document.querySelector('#music .filter-controls'),
+        document.querySelectorAll('.content-list > div'),
+        (filterValue) => {
+            waveSurfers.forEach(ws => ws.pause());
+            stopAllVideos();
+            if (filterValue === 'audio') initAudioPlayers();
         }
-    }
+    );
+
+    // Behind the Scenes
+    setupFilter(
+        document.querySelector('.gallery-filters'),
+        document.querySelectorAll('.gallery-content > div')
+    );
 });
