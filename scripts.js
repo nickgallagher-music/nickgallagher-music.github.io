@@ -216,46 +216,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Stop every track and rewind it to the beginning
+    const resetAllTracks = () => {
+        waveSurfers.forEach(ws => {
+            ws.pause();
+            ws.setTime(0);
+        });
+        document.querySelectorAll('.restart-btn').forEach(btn => {
+            btn.disabled = true;
+        });
+    };
+
     // --- Filter Logic ---
     // Hidden items get the `hidden` attribute so they are removed from
     // the layout, tab order and screen readers, not just visually collapsed.
     const setupFilter = (controls, items, onChange) => {
         if (!controls) return;
 
-        controls.addEventListener('click', (e) => {
-            const clickedButton = e.target.closest('.filter-btn');
-            if (!clickedButton) return;
-
-            const filterValue = clickedButton.dataset.filter;
-
-            // Update active button state (aria-pressed tells screen readers which tab is on)
-            const previousButton = controls.querySelector('.active');
-            previousButton.classList.remove('active');
-            previousButton.setAttribute('aria-pressed', 'false');
-            clickedButton.classList.add('active');
-            clickedButton.setAttribute('aria-pressed', 'true');
-
+        const showCategory = (filterValue) => {
             items.forEach(item => {
                 item.hidden = item.dataset.category !== filterValue;
             });
 
             // Runs after the new tab is visible, so players are created at full width
             if (onChange) onChange(filterValue);
+        };
+
+        controls.addEventListener('click', (e) => {
+            const clickedButton = e.target.closest('.filter-btn');
+            const previousButton = controls.querySelector('.active');
+            // Ignore clicks on the tab that's already open, so playback isn't interrupted
+            if (!clickedButton || clickedButton === previousButton) return;
+
+            // Update active button state (aria-pressed tells screen readers which tab is on)
+            previousButton.classList.remove('active');
+            previousButton.setAttribute('aria-pressed', 'false');
+            clickedButton.classList.add('active');
+            clickedButton.setAttribute('aria-pressed', 'true');
+
+            showCategory(clickedButton.dataset.filter);
         });
 
-        // Simulate a click on the default active filter button
+        // Show the default tab on page load
         const defaultFilter = controls.querySelector('.filter-btn.active');
         if (defaultFilter) {
-            defaultFilter.click();
+            showCategory(defaultFilter.dataset.filter);
         }
     };
 
-    // Selected Works: pause whatever is playing when switching tabs
+    // Selected Works: stop and rewind everything when switching tabs
     setupFilter(
         document.querySelector('#music .filter-controls'),
         document.querySelectorAll('.content-list > div'),
         (filterValue) => {
-            waveSurfers.forEach(ws => ws.pause());
+            resetAllTracks();
             stopAllVideos();
             if (filterValue === 'audio') initAudioPlayers();
         }
