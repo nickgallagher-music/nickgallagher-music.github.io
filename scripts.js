@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="audio-player">
                         <button class="play-btn" aria-label="Play/Pause"></button>
+                        <button class="restart-btn" aria-label="Restart track" disabled></button>
                         <div class="waveform-container"></div>
                     </div>
                 </div>
@@ -159,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.track').forEach(track => {
             const container = track.querySelector('.waveform-container');
             const playBtn = track.querySelector('.play-btn');
+            const restartBtn = track.querySelector('.restart-btn');
             const audioSrc = track.dataset.audioSrc;
             const trackDesc = track.querySelector('.track-desc');
             const precomputed = allPeaks[audioSrc];
@@ -195,8 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             playBtn.onclick = () => waveSurfer.playPause();
+            // Jump back to the start and play, whether currently playing or paused
+            restartBtn.onclick = () => waveSurfer.play(0);
             waveSurfer.on('play', () => {
                 playBtn.classList.add('playing');
+                restartBtn.disabled = false;
                 // Only one track plays at a time
                 waveSurfers.forEach(other => {
                     if (other !== waveSurfer) other.pause();
